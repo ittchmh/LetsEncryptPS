@@ -88,13 +88,11 @@ function Set-LetsEncryptPsSettings
 	}
 	else
 	{
-		if ((Get-Member -inputobject $options -name "credential_repository" -Membertype Properties) -and (-not ([string]::IsNullOrEmpty($options.Repository))))
+		$options = (Get-Content -Path (Join-Path -Path $Repository -ChildPath 'options.json') -Force -Verbose:$false) | ConvertFrom-Json
+		if ((Get-Member -inputobject $options -name "credential_repository" -Membertype Properties) -and (-not ([string]::IsNullOrEmpty($options.credential_repository))))
 		{
-			$options.Repository = $Repository
-		}
-		else
-		{
-			$options | Add-Member -MemberType NoteProperty -Name Repository -Value $Repository
+			# TODO: Test, Repository path should not change!!!
+			#$options.Repository = $Repository
 		}
 	}
 	
